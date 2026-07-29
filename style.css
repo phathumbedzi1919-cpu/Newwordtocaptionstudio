@@ -177,8 +177,7 @@ header h1{
     inset:0;
     display:flex;
     justify-content:center;
-
-    /* Move caption slightly higher for Shorts */
+ */
     align-items:center;
 
     padding:40px;
