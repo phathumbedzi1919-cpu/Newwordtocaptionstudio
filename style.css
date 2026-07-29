@@ -6,8 +6,8 @@
 }
 
 body{
-    background:#101010;
-    color:white;
+    background:#111;
+    color:#fff;
     height:100vh;
     overflow:hidden;
 }
@@ -16,7 +16,7 @@ body{
 
 header{
     height:60px;
-    background:#1a1a1a;
+    background:#1b1b1b;
     display:flex;
     justify-content:center;
     align-items:center;
@@ -28,9 +28,9 @@ header h1{
     letter-spacing:1px;
 }
 
-/* MAIN */
+/* LAYOUT */
 
-.studio{
+.container{
     display:flex;
     height:calc(100vh - 60px);
 }
@@ -47,52 +47,92 @@ header h1{
 
 .controls h2{
     margin-bottom:10px;
+    font-size:18px;
 }
 
 .controls hr{
-    margin:20px 0;
     border:none;
     height:1px;
     background:#333;
+    margin:20px 0;
 }
 
 .controls textarea{
     width:100%;
-    height:90px;
+    height:120px;
     resize:none;
+    background:#222;
+    color:#fff;
+    border:1px solid #444;
+    border-radius:8px;
+    padding:10px;
+    font-size:16px;
+}
+
+.controls textarea:focus{
+    outline:none;
+    border-color:#3fa9f5;
+}
+
+.controls select{
+    width:100%;
+    padding:10px;
     background:#222;
     color:white;
     border:1px solid #444;
     border-radius:8px;
-    padding:10px;
-    margin-bottom:15px;
 }
 
 .controls input[type=file]{
     width:100%;
-    margin-bottom:10px;
 }
 
 .controls input[type=range]{
     width:100%;
-    margin:8px 0 15px;
 }
 
 .controls button{
     width:100%;
     padding:12px;
+    margin-top:10px;
+    background:#3fa9f5;
+    color:white;
     border:none;
     border-radius:8px;
-    background:#2f8cff;
-    color:white;
     font-size:16px;
-    font-weight:bold;
     cursor:pointer;
-    margin-top:10px;
 }
 
 .controls button:hover{
-    background:#1d73dc;
+    background:#2b89d7;
+}
+
+/* WORD EDITOR */
+
+#wordEditor{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.wordCard{
+    background:#222;
+    border:1px solid #444;
+    border-radius:10px;
+    padding:10px;
+}
+
+.wordCard h4{
+    margin-bottom:8px;
+    font-size:15px;
+    word-break:break-word;
+}
+
+.wordCard input[type=color]{
+    width:100%;
+    height:40px;
+    border:none;
+    cursor:pointer;
 }
 
 /* PREVIEW */
@@ -102,8 +142,7 @@ header h1{
     display:flex;
     justify-content:center;
     align-items:center;
-    background:#222;
-    overflow:auto;
+    background:#202020;
     padding:20px;
 }
 
@@ -111,87 +150,59 @@ header h1{
 
 #canvas{
     position:relative;
-    width:540px;
-    height:960px;
-    background:black;
+    width:720px;
+    height:720px;
+    background:#000;
+    border-radius:15px;
     overflow:hidden;
-    border-radius:20px;
-    box-shadow:0 0 30px rgba(0,0,0,.5);
+    box-shadow:0 0 25px rgba(0,0,0,.5);
 }
 
-/* MAIN IMAGE */
+/* BACKGROUND IMAGE */
 
-#mainImage{
+#backgroundImage{
     position:absolute;
     top:0;
     left:0;
     width:100%;
-    height:50%;
+    height:100%;
     object-fit:cover;
     display:none;
 }
 
-/* MIRROR IMAGE */
+/* CAPTION CONTAINER */
 
-#mirrorImage{
+#captionContainer{
     position:absolute;
-    bottom:0;
-    left:0;
-    width:100%;
-    height:50%;
-    object-fit:cover;
-    transform:scaleY(-1);
-    opacity:.8;
-    display:none;
+    inset:0;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:40px;
+    z-index:2;
 }
 
-/* DARK FADE */
+/* CAPTION */
 
-#canvas::after{
-    content:"";
-    position:absolute;
-    left:0;
-    bottom:0;
+#captionPreview{
     width:100%;
-    height:50%;
-    background:linear-gradient(
-        rgba(0,0,0,0),
-        rgba(0,0,0,.6),
-        rgba(0,0,0,.9)
-    );
-    pointer-events:none;
-}
-
-/* TOP CAPTION */
-
-#captionOnePreview{
-    position:absolute;
-    top:20%;
-    left:50%;
-    transform:translateX(-50%);
-    width:90%;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    align-items:center;
     text-align:center;
-    font-size:48px;
+    line-height:1.4;
+}
+
+/* EACH WORD */
+
+#captionPreview span{
+    display:inline-block;
+    margin:4px;
+    font-size:50px;
     font-weight:bold;
     color:white;
-    text-shadow:4px 4px 10px black;
-    z-index:5;
-}
-
-/* BOTTOM CAPTION */
-
-#captionTwoPreview{
-    position:absolute;
-    bottom:18%;
-    left:50%;
-    transform:translateX(-50%);
-    width:90%;
-    text-align:center;
-    font-size:48px;
-    font-weight:bold;
-    color:white;
-    text-shadow:4px 4px 10px black;
-    z-index:5;
+    text-shadow:3px 3px 8px rgba(0,0,0,.9);
 }
 
 /* LOGO */
@@ -206,7 +217,7 @@ header h1{
     font-weight:bold;
     letter-spacing:2px;
     text-shadow:2px 2px 6px black;
-    z-index:6;
+    z-index:3;
 }
 
 /* SCROLLBAR */
@@ -217,14 +228,14 @@ header h1{
 
 ::-webkit-scrollbar-thumb{
     background:#555;
-    border-radius:20px;
+    border-radius:10px;
 }
 
 /* MOBILE */
 
 @media(max-width:900px){
 
-.studio{
+.container{
     flex-direction:column;
 }
 
@@ -237,55 +248,16 @@ header h1{
 
 .previewArea{
     height:55%;
-}
-
-#canvas{
-    width:90vw;
-    height:160vw;
-    max-height:90vh;
-}
-
-#captionOnePreview,
-#captionTwoPreview{
-    font-size:34px;
-}
-
-    }
-/* MOBILE */
-
-@media(max-width:900px){
-
-    /* your existing mobile styles */
-
-}
-
-
-/* =========================
-   WORD EDITOR
-========================= */
-
-#wordEditorOne,
-#wordEditorTwo{
-    display:flex;
-    flex-direction:column;
-    gap:10px;
-}
-
-.wordCard{
-    background:#252525;
-    border:1px solid #444;
-    border-radius:10px;
     padding:10px;
 }
 
-.wordCard h4{
-    margin-bottom:8px;
-    word-break:break-word;
+#canvas{
+    width:95vw;
+    height:95vw;
 }
 
-.wordCard input[type=color]{
-    width:100%;
-    height:40px;
-    border:none;
-    cursor:pointer;
+#captionPreview span{
+    font-size:34px;
 }
+
+        }
