@@ -175,14 +175,13 @@ header h1{
 #captionContainer{
     position:absolute;
     inset:0;
+
     display:flex;
     justify-content:center;
- */
     align-items:center;
 
-    padding:40px;
-
-    transform:translateY(-60px);
+    /* Safe margins */
+    padding:90px;
 
     z-index:2;
 }
@@ -190,7 +189,7 @@ header h1{
 /* CAPTION */
 
 #captionPreview{
-    width:100%;
+    width:70%;
     display:flex;
     flex-wrap:wrap;
     justify-content:center;
