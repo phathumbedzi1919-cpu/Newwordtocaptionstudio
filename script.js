@@ -1,30 +1,28 @@
 const imageInput = document.getElementById("imageInput");
-const removeImageBtn = document.getElementById("removeImageBtn");
+const mainImage = document.getElementById("mainImage");
+const mirrorImage = document.getElementById("mirrorImage");
 
-const captionInput = document.getElementById("captionInput");
-const generateWordsBtn = document.getElementById("generateWordsBtn");
+const captionOne = document.getElementById("captionOne");
+const captionTwo = document.getElementById("captionTwo");
 
-const wordEditor = document.getElementById("wordEditor");
-const captionPreview = document.getElementById("captionPreview");
+const captionOnePreview = document.getElementById("captionOnePreview");
+const captionTwoPreview = document.getElementById("captionTwoPreview");
 
-const backgroundImage = document.getElementById("backgroundImage");
+const captionSize = document.getElementById("captionSize");
+const mirrorOpacity = document.getElementById("mirrorOpacity");
+const mirrorAngle = document.getElementById("mirrorAngle");
 
-const fontFamily = document.getElementById("fontFamily");
-const fontSize = document.getElementById("fontSize");
-
-const shadowToggle = document.getElementById("shadowToggle");
-const shadowBlur = document.getElementById("shadowBlur");
-const shadowX = document.getElementById("shadowX");
-const shadowY = document.getElementById("shadowY");
-
+const mirrorBtn = document.getElementById("mirrorBtn");
 const saveBtn = document.getElementById("saveBtn");
 const canvas = document.getElementById("canvas");
 
-let words = [];
 
-/* ===========================
-   IMAGE UPLOAD
-=========================== */
+let imageLoaded = false;
+
+
+/*=========================
+IMAGE UPLOAD
+=========================*/
 
 imageInput.addEventListener("change", function () {
 
@@ -36,8 +34,13 @@ imageInput.addEventListener("change", function () {
 
     reader.onload = function (e) {
 
-        backgroundImage.src = e.target.result;
-        backgroundImage.style.display = "block";
+        mainImage.src = e.target.result;
+        mirrorImage.src = e.target.result;
+
+        mainImage.style.display = "block";
+        mirrorImage.style.display = "block";
+
+        imageLoaded = true;
 
     };
 
@@ -45,149 +48,87 @@ imageInput.addEventListener("change", function () {
 
 });
 
-removeImageBtn.addEventListener("click", () => {
 
-    backgroundImage.src = "";
-    backgroundImage.style.display = "none";
-    imageInput.value = "";
+/*=========================
+LIVE CAPTIONS
+=========================*/
+
+captionOne.addEventListener("input", () => {
+
+    captionOnePreview.innerText = captionOne.value;
+
+});
+
+captionTwo.addEventListener("input", () => {
+
+    captionTwoPreview.innerText = captionTwo.value;
 
 });
 
 
-/* ===========================
-   GENERATE WORD EDITOR
-=========================== */
+/*=========================
+CAPTION SIZE
+=========================*/
 
-generateWordsBtn.addEventListener("click", () => {
+captionSize.addEventListener("input", () => {
 
-    words = captionInput.value.trim().split(/\s+/);
+    captionOnePreview.style.fontSize =
+        captionSize.value + "px";
 
-    wordEditor.innerHTML = "";
-
-    words.forEach((word, index) => {
-
-        const card = document.createElement("div");
-        card.className = "wordCard";
-
-        card.innerHTML = `
-
-            <h3>${word}</h3>
-
-            <label>Word Color</label>
-
-            <input
-                type="color"
-                value="#ffffff"
-                data-index="${index}"
-                class="colorPicker">
-
-        `;
-
-        wordEditor.appendChild(card);
-
-    });
-
-    attachColorEvents();
-
-    updatePreview();
+    captionTwoPreview.style.fontSize =
+        captionSize.value + "px";
 
 });
 
 
-/* ===========================
-   COLOR PICKERS
-=========================== */
+/*=========================
+MIRROR OPACITY
+=========================*/
 
-function attachColorEvents() {
+mirrorOpacity.addEventListener("input", () => {
 
-    const pickers = document.querySelectorAll(".colorPicker");
-
-    pickers.forEach(picker => {
-
-        picker.addEventListener("input", updatePreview);
-
-    });
-
-}
-
-
-/* ===========================
-   UPDATE PREVIEW
-=========================== */
-
-function updatePreview() {
-
-    captionPreview.innerHTML = "";
-
-    const pickers = document.querySelectorAll(".colorPicker");
-
-    words.forEach((word, index) => {
-
-        const span = document.createElement("span");
-
-        span.textContent = word + " ";
-
-        if (pickers[index]) {
-
-            span.style.color = pickers[index].value;
-
-        }
-
-        span.style.fontFamily = fontFamily.value;
-
-        span.style.fontSize = fontSize.value + "px";
-
-        if (shadowToggle.checked) {
-
-            span.style.textShadow =
-                `${shadowX.value}px ${shadowY.value}px ${shadowBlur.value}px black`;
-
-        } else {
-
-            span.style.textShadow = "none";
-
-        }
-
-        captionPreview.appendChild(span);
-
-    });
-
-}
-
-
-/* ===========================
-   FONT SETTINGS
-=========================== */
-
-fontFamily.addEventListener("change", updatePreview);
-
-fontSize.addEventListener("input", updatePreview);
-
-shadowToggle.addEventListener("change", updatePreview);
-
-shadowBlur.addEventListener("input", updatePreview);
-
-shadowX.addEventListener("input", updatePreview);
-
-shadowY.addEventListener("input", updatePreview);
-
-
-/* ===========================
-   LIVE TEXT UPDATE
-=========================== */
-
-captionInput.addEventListener("input", () => {
-
-    words = captionInput.value.trim().split(/\s+/);
-
-    updatePreview();
+    mirrorImage.style.opacity =
+        mirrorOpacity.value / 100;
 
 });
 
 
-/* ===========================
-   SAVE PNG
-=========================== */
+/*=========================
+MIRROR ROTATION
+=========================*/
+
+mirrorAngle.addEventListener("input", () => {
+
+    mirrorImage.style.transform =
+        "scaleY(-1) rotate(" +
+        mirrorAngle.value +
+        "deg)";
+
+});
+
+
+/*=========================
+MIRROR BUTTON
+=========================*/
+
+mirrorBtn.addEventListener("click", () => {
+
+    if (!imageLoaded) {
+
+        alert("Please upload a photo first.");
+
+        return;
+
+    }
+
+    mirrorImage.style.display = "block";
+
+});
+
+
+/*=========================
+SAVE IMAGE
+=========================*/
 
 saveBtn.addEventListener("click", () => {
 
@@ -196,13 +137,13 @@ saveBtn.addEventListener("click", () => {
         useCORS: true,
         scale: 3
 
-    }).then(canvasImage => {
+    }).then((result) => {
 
         const link = document.createElement("a");
 
-        link.download = "caption.png";
+        link.download = "MirrorCaption.png";
 
-        link.href = canvasImage.toDataURL("image/png");
+        link.href = result.toDataURL("image/png");
 
         link.click();
 
@@ -211,8 +152,18 @@ saveBtn.addEventListener("click", () => {
 });
 
 
-/* ===========================
-   INITIAL PREVIEW
-=========================== */
+/*=========================
+DEFAULT SETTINGS
+=========================*/
 
-updatePreview();
+captionOnePreview.style.fontSize =
+captionSize.value + "px";
+
+captionTwoPreview.style.fontSize =
+captionSize.value + "px";
+
+mirrorImage.style.opacity =
+mirrorOpacity.value / 100;
+
+mirrorImage.style.transform =
+"scaleY(-1) rotate(180deg)";
