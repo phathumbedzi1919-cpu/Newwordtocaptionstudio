@@ -1,167 +1,202 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Caption Studio</title>
+
+<title>Mirror Caption Studio</title>
 
 <link rel="stylesheet" href="style.css">
+
 </head>
+
+
 <body>
 
+
 <header>
-    <h1>Caption Studio</h1>
+
+<h1>Mirror Caption Studio</h1>
+
 </header>
 
-<div class="container">
 
-    <!-- LEFT PANEL -->
-    <div class="controls">
 
-        <h2>Background</h2>
+<div class="studio">
 
-        <input
-            type="file"
-            id="imageInput"
-            accept="image/*">
 
-        <button id="removeImageBtn">
-            Remove Image
-        </button>
+<!-- CONTROL PANEL -->
 
-        <hr>
+<div class="controls">
 
-        <h2>Caption</h2>
 
-        <textarea
-            id="captionInput"
-            placeholder="Write your caption here..."
-            rows="5"></textarea>
+<h2>PHOTO</h2>
 
-        <button id="generateWordsBtn">
-            Generate Word Editor
-        </button>
+<input 
+type="file"
+id="imageInput"
+accept="image/*">
 
-        <hr>
 
-        <div id="wordEditor">
+<button id="mirrorBtn">
+Create Mirror
+</button>
 
-            <!-- Script will create one editor for every word -->
 
-        </div>
 
-        <hr>
+<hr>
 
-        <h2>Font</h2>
 
-        <select id="fontFamily">
 
-            <option value="Arial">Arial</option>
+<h2>CAPTION 1</h2>
 
-            <option value="Georgia">Georgia</option>
 
-            <option value="Verdana">Verdana</option>
+<textarea
+id="captionOne"
+placeholder="Write first caption...">
+</textarea>
 
-            <option value="Tahoma">Tahoma</option>
 
-            <option value="Impact">Impact</option>
 
-        </select>
+<h2>CAPTION 2</h2>
 
-        <br><br>
 
-        <label>Font Size</label>
+<textarea
+id="captionTwo"
+placeholder="Write mirror caption...">
+</textarea>
 
-        <input
-            type="range"
-            id="fontSize"
-            min="20"
-            max="100"
-            value="48">
 
-        <hr>
 
-        <label>
+<hr>
 
-            <input
-                type="checkbox"
-                id="shadowToggle"
-                checked>
 
-            Enable Shadow
+<h2>SETTINGS</h2>
 
-        </label>
 
-        <br><br>
+<label>
+Caption Size
+</label>
 
-        <label>Shadow Blur</label>
+<input 
+type="range"
+id="captionSize"
+min="20"
+max="100"
+value="50">
 
-        <input
-            type="range"
-            id="shadowBlur"
-            min="0"
-            max="30"
-            value="8">
 
-        <br><br>
 
-        <label>Shadow X</label>
+<label>
+Mirror Opacity
+</label>
 
-        <input
-            type="range"
-            id="shadowX"
-            min="-20"
-            max="20"
-            value="3">
+<input 
+type="range"
+id="mirrorOpacity"
+min="0"
+max="100"
+value="80">
 
-        <br><br>
 
-        <label>Shadow Y</label>
 
-        <input
-            type="range"
-            id="shadowY"
-            min="-20"
-            max="20"
-            value="3">
+<label>
+Mirror Angle
+</label>
 
-        <hr>
+<input 
+type="range"
+id="mirrorAngle"
+min="0"
+max="180"
+value="180">
 
-        <button id="saveBtn">
-            Save PNG
-        </button>
 
-    </div>
 
-    <!-- RIGHT PANEL -->
+<br>
 
-    <div class="previewPanel">
 
-        <div id="canvas">
+<button id="saveBtn">
+Save Image
+</button>
 
-            <img
-                id="backgroundImage"
-                src=""
-                alt="">
-
-            <div id="captionPreview">
-
-            </div>
-
-            <div id="logo">
-
-                PHATHU MBEDZI
-
-            </div>
-
-        </div>
-
-    </div>
 
 </div>
 
+
+
+
+
+<!-- PREVIEW -->
+
+
+<div class="previewArea">
+
+
+<div id="canvas">
+
+
+<!-- ORIGINAL PHOTO -->
+
+<img 
+id="mainImage">
+
+
+
+<!-- MIRROR PHOTO -->
+
+<img 
+id="mirrorImage">
+
+
+
+
+
+<!-- FIRST CAPTION -->
+
+<div 
+id="captionOnePreview">
+
+</div>
+
+
+
+
+
+<!-- SECOND CAPTION -->
+
+<div 
+id="captionTwoPreview">
+
+</div>
+
+
+
+<div id="logo">
+
+PHATHU MBEDZI
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
 <script src="script.js"></script>
 
+
 </body>
-  </html>
+
+</html>
