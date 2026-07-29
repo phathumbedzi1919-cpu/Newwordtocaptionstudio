@@ -1,29 +1,28 @@
 const imageInput = document.getElementById("imageInput");
-const mainImage = document.getElementById("mainImage");
-const mirrorImage = document.getElementById("mirrorImage");
+const backgroundImage = document.getElementById("backgroundImage");
 
-const captionOne = document.getElementById("captionOne");
-const captionTwo = document.getElementById("captionTwo");
+const captionInput = document.getElementById("captionInput");
+const generateBtn = document.getElementById("generateBtn");
 
-const captionOnePreview = document.getElementById("captionOnePreview");
-const captionTwoPreview = document.getElementById("captionTwoPreview");
+const wordEditor = document.getElementById("wordEditor");
+const captionPreview = document.getElementById("captionPreview");
 
-const captionSize = document.getElementById("captionSize");
-const mirrorOpacity = document.getElementById("mirrorOpacity");
-const mirrorAngle = document.getElementById("mirrorAngle");
+const fontFamily = document.getElementById("fontFamily");
+const fontSize = document.getElementById("fontSize");
 
-const mirrorBtn = document.getElementById("mirrorBtn");
+const shadowToggle = document.getElementById("shadowToggle");
+const shadowBlur = document.getElementById("shadowBlur");
+
 const saveBtn = document.getElementById("saveBtn");
-
-const wordEditorOne = document.getElementById("wordEditorOne");
-const wordEditorTwo = document.getElementById("wordEditorTwo");
-
 const canvas = document.getElementById("canvas");
 
+let words = [];
+let colors = [];
 
-/* -------------------------
-IMAGE UPLOAD
-------------------------- */
+
+/* ==========================
+   IMAGE UPLOAD
+========================== */
 
 imageInput.addEventListener("change", function(){
 
@@ -35,11 +34,8 @@ imageInput.addEventListener("change", function(){
 
     reader.onload = function(e){
 
-        mainImage.src = e.target.result;
-        mirrorImage.src = e.target.result;
-
-        mainImage.style.display = "block";
-        mirrorImage.style.display = "block";
+        backgroundImage.src = e.target.result;
+        backgroundImage.style.display = "block";
 
     }
 
@@ -48,36 +44,34 @@ imageInput.addEventListener("change", function(){
 });
 
 
-/* -------------------------
-CAPTION EVENTS
-------------------------- */
+/* ==========================
+   GENERATE WORD EDITOR
+========================== */
 
-captionOne.addEventListener("input", buildCaptionOne);
-
-captionTwo.addEventListener("input", buildCaptionTwo);
-
-captionSize.addEventListener("input", ()=>{
-
-    buildCaptionOne();
-    buildCaptionTwo();
-
-});
+generateBtn.addEventListener("click", buildEditor);
 
 
-/* -------------------------
-BUILD CAPTION ONE
-------------------------- */
+function buildEditor(){
 
-function buildCaptionOne(){
+    const text = captionInput.value.trim();
 
-    const words = captionOne.value.trim().split(/\s+/);
+    if(text === ""){
 
-    wordEditorOne.innerHTML = "";
-    captionOnePreview.innerHTML = "";
+        wordEditor.innerHTML = "";
+        captionPreview.innerHTML = "";
+        return;
+
+    }
+
+    words = text.split(/\s+/);
+
+    colors = [];
+
+    wordEditor.innerHTML = "";
 
     words.forEach((word,index)=>{
 
-        if(word==="") return;
+        colors.push("#ffffff");
 
         const card = document.createElement("div");
         card.className = "wordCard";
@@ -86,158 +80,119 @@ function buildCaptionOne(){
             <h4>${word}</h4>
 
             <input
-            type="color"
-            value="#ffffff"
-            class="pickerOne"
-            data-index="${index}">
+                type="color"
+                value="#ffffff"
+                data-index="${index}"
+                class="colorPicker">
         `;
 
-        wordEditorOne.appendChild(card);
-
-        const span = document.createElement("span");
-
-        span.innerText = word + " ";
-
-        span.style.fontSize = captionSize.value + "px";
-        span.style.fontWeight = "bold";
-        span.style.textShadow = "3px 3px 8px black";
-
-        captionOnePreview.appendChild(span);
+        wordEditor.appendChild(card);
 
     });
 
-    updateColorsOne();
+    addColorEvents();
+
+    renderCaption();
 
 }
 
 
-/* -------------------------
-BUILD CAPTION TWO
-------------------------- */
+/* ==========================
+   COLOR EVENTS
+========================== */
 
-function buildCaptionTwo(){
+function addColorEvents(){
 
-    const words = captionTwo.value.trim().split(/\s+/);
+    const pickers = document.querySelectorAll(".colorPicker");
 
-    wordEditorTwo.innerHTML = "";
-    captionTwoPreview.innerHTML = "";
+    pickers.forEach((picker)=>{
+
+        picker.addEventListener("input",function(){
+
+            const index = Number(this.dataset.index);
+
+            colors[index] = this.value;
+
+            renderCaption();
+
+        });
+
+    });
+
+}
+
+
+/* ==========================
+   RENDER CAPTION
+========================== */
+
+function renderCaption(){
+
+    captionPreview.innerHTML = "";
 
     words.forEach((word,index)=>{
 
-        if(word==="") return;
-
-        const card = document.createElement("div");
-        card.className = "wordCard";
-
-        card.innerHTML = `
-            <h4>${word}</h4>
-
-            <input
-            type="color"
-            value="#ffffff"
-            class="pickerTwo"
-            data-index="${index}">
-        `;
-
-        wordEditorTwo.appendChild(card);
-
         const span = document.createElement("span");
 
-        span.innerText = word + " ";
+        span.textContent = word;
 
-        span.style.fontSize = captionSize.value + "px";
-        span.style.fontWeight = "bold";
-        span.style.textShadow = "3px 3px 8px black";
+        span.style.color = colors[index];
 
-        captionTwoPreview.appendChild(span);
+        span.style.fontFamily = fontFamily.value;
 
-    });
+        span.style.fontSize = fontSize.value + "px";
 
-    updateColorsTwo();
+        if(shadowToggle.checked){
 
-}
+            span.style.textShadow =
+            "3px 3px " +
+            shadowBlur.value +
+            "px rgba(0,0,0,.9)";
 
+        }else{
 
-/* -------------------------
-COLOR PICKERS
-------------------------- */
+            span.style.textShadow = "none";
 
-function updateColorsOne(){
+        }
 
-    const pickers = document.querySelectorAll(".pickerOne");
-    const spans = captionOnePreview.querySelectorAll("span");
-
-    pickers.forEach((picker,index)=>{
-
-        picker.addEventListener("input",()=>{
-
-            spans[index].style.color = picker.value;
-
-        });
-
-    });
-
-}
-
-function updateColorsTwo(){
-
-    const pickers = document.querySelectorAll(".pickerTwo");
-    const spans = captionTwoPreview.querySelectorAll("span");
-
-    pickers.forEach((picker,index)=>{
-
-        picker.addEventListener("input",()=>{
-
-            spans[index].style.color = picker.value;
-
-        });
+        captionPreview.appendChild(span);
 
     });
 
 }
 
 
-/* -------------------------
-MIRROR
-------------------------- */
+/* ==========================
+   LIVE SETTINGS
+========================== */
 
-mirrorOpacity.addEventListener("input",()=>{
+fontFamily.addEventListener("change", renderCaption);
 
-    mirrorImage.style.opacity =
-    mirrorOpacity.value/100;
+fontSize.addEventListener("input", renderCaption);
 
-});
+shadowToggle.addEventListener("change", renderCaption);
 
-mirrorAngle.addEventListener("input",()=>{
-
-    mirrorImage.style.transform =
-    `scaleY(-1) rotate(${mirrorAngle.value}deg)`;
-
-});
-
-mirrorBtn.addEventListener("click",()=>{
-
-    mirrorImage.style.display="block";
-
-});
+shadowBlur.addEventListener("input", renderCaption);
 
 
-/* -------------------------
-SAVE
-------------------------- */
+/* ==========================
+   SAVE PNG
+========================== */
 
 saveBtn.addEventListener("click",()=>{
 
     html2canvas(canvas,{
-        scale:3,
-        useCORS:true
-    }).then(result=>{
 
-        const link=document.createElement("a");
+        useCORS:true,
+        scale:3
 
-        link.download="caption.png";
+    }).then((result)=>{
 
-        link.href=result.toDataURL();
+        const link = document.createElement("a");
+
+        link.download = "caption.png";
+
+        link.href = result.toDataURL("image/png");
 
         link.click();
 
