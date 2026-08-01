@@ -189,7 +189,7 @@ header h1{
 /* CAPTION */
 
 #captionPreview{
-    width:70%;
+    width:80%;
     display:flex;
     flex-wrap:wrap;
     justify-content:center;
